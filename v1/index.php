@@ -136,19 +136,7 @@ $app->post('/login', function() use ($app) {
 	
 		// fetch task
 		$result = $db->getProduct($productId);
-	/*
-	 * 		$tmp = array();
-			$tmp["productId"] = $task["productId"];
-			$tmp["productName"] = $task["productName"];
-			$tmp["productDescription"] = $task["productDescription"];
-			$tmp["defaultQuantity"] = $task["defaultQuantity"];
-			$tmp["quantity1"] = $task["quantity1"];
-			$tmp["quantity2"] = $task["quantity2"];
-			$tmp["quantity3"] = $task["quantity3"];
-			$tmp["currentRate"] = $task["currentRate"];
-			$tmp["category"] = $task["category"];
-			$tmp["saleUnit"] = $task["saleUnit"];
-	 */
+	
 		if ($result != NULL) {
 			$response["error"] = false;
 			$response["productName"] = $result["productName"];
