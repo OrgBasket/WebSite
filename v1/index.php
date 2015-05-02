@@ -168,7 +168,13 @@ $app->post('/login', function() use ($app) {
 		}
 	});
 	
-
+		$app->get('/hello', function() use ($app) {
+		$response = array();
+		$response["error"] = false;
+        $response["message"] = "Well done! You have the REST service up!";
+		echoRespnse(200, $response);
+		});
+	
 	$app->get('/products', function() use ($app) {
 		// check for required params
 		//verifyRequiredParams(array('email', 'password'));
