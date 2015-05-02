@@ -10,7 +10,12 @@ class DbHandler {
         $this->conn = $db->connect();
     }
     public function getProducts($category) {
-    	$sql = "select p.productId as productId, p.productName as productName ,p.productDescription as productDescription,p.productDefaultQuantity as defaultQuantity ,p.productQuantity1 as quantity1,p.productQuantity2 as quantity2,p.productQuantity3 as quantity3, p.currentRate as currentRate,c.categoryName as category ,s.saleUnitLabel as saleUnit from products p, productcategory c,saleunit s where c.categoryId=? and p.productCategoryId =c.categoryId and p.productSaleUnitId = s.saleUnitId";
+    	$sql = "select p.productId as productId, p.productName as productName ,p.productDescription as productDescription,p.productDefaultQuantity as defaultQuantity ,p.productQuantity1 as quantity1,p.productQuantity2 as quantity2,p.productQuantity3 as quantity3, p.currentRate as currentRate,c.categoryName as category ,s.saleUnitLabel as saleUnit from products p, productcategory c,saleunit s";
+    	if (!(is_null($category))) {
+    		$sql += "where c.categoryId=? and p.productCategoryId =c.categoryId and p.productSaleUnitId = s.saleUnitId";
+    	} else {
+    		$sql += "where p.productCategoryId =c.categoryId and p.productSaleUnitId = s.saleUnitId";
+    	}
     	//$sql = "SELECT * from products";
     	$stmt = $this->conn->prepare($sql);
     	$stmt->bind_param("s", $category);
