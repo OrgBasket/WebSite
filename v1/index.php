@@ -203,8 +203,6 @@ $app->post('/login', function() use ($app) {
 			$tmp["saleUnit"] = $task["saleUnit"];			
 			array_push($response["products"], $tmp);
 		}
-		
-	
 		echoRespnse(200, $response);
 	});
 	
