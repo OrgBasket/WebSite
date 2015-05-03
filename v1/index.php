@@ -169,13 +169,14 @@ $app->post('/login', function() use ($app) {
 	
 		// reading post params
 		$category = $app->request()->get('category');
+		$searchText = $app->request()->get('searchText');
 		$response = array();
 
 		$response["error"] = false;
 		$response["products"] = array();
 		
 		$db = new DbHandler();
-		$result = $db->getProducts($category);
+		$result = $db->getProducts($category,$searchText);
 		
 		while ($task = $result->fetch_assoc()) {
 			$tmp = array();

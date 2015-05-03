@@ -9,16 +9,23 @@ class DbHandler {
         $db = new DbConnect();
         $this->conn = $db->connect();
     }
-    public function getProducts($category) {
-    	$sql = "select p.productId as productId, p.productName as productName ,p.productDescription as productDescription,p.productDefaultQuantity as defaultQuantity ,p.productQuantity1 as quantity1,p.productQuantity2 as quantity2,p.productQuantity3 as quantity3, p.currentRate as currentRate,c.categoryName as category ,s.saleUnitLabel as saleUnit from products p, productcategory c,saleunit s";
+    public function getProducts($category,$searchText) {
+    	$sql = "select p.productId as productId, p.productName as productName ,p.productDescription as productDescription,p.productDefaultQuantity as defaultQuantity ,p.productQuantity1 as quantity1,p.productQuantity2 as quantity2,p.productQuantity3 as quantity3, p.currentRate as currentRate,c.categoryName as category ,s.saleUnitLabel as saleUnit from products p, productcategory c,saleunit s where p.productCategoryId =c.categoryId and p.productSaleUnitId = s.saleUnitId";
+    	
+    	
     	if (!(is_null($category))) {
-    		$sql += "where c.categoryId=? and p.productCategoryId =c.categoryId and p.productSaleUnitId = s.saleUnitId";
+    		$sql.= " and c.categoryId=? ";
+    	} if (!((is_null($searchText)))) {
+    		$sql.= " and lower(p.productName) like '%" . strtolower($searchText)."%'";
     	} else {
-    		$sql += "where p.productCategoryId =c.categoryId and p.productSaleUnitId = s.saleUnitId";
+    		
     	}
     	//$sql = "SELECT * from products";
     	$stmt = $this->conn->prepare($sql);
-    	$stmt->bind_param("s", $category);
+    	if (!(is_null($category)) ){
+    		$stmt->bind_param("s", $category);
+    	}
+    	
     	$stmt->execute();
     	$tasks = $stmt->get_result();
     	$stmt->close();
