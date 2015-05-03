@@ -59,12 +59,13 @@ function authenticate(\Slim\Route $route) {
  */
 $app->post('/register', function() use ($app) {
             // check for required params
-            verifyRequiredParams(array('name', 'email', 'password'));
+            verifyRequiredParams(array('firstName','lastName', 'email', 'password'));
 
             $response = array();
 
             // reading post params
-            $name = $app->request->post('name');
+            $firstName = $app->request->post('firstName');
+            $lastName = $app->request->post('lastName');
             $email = $app->request->post('email');
             $password = $app->request->post('password');
 
@@ -72,7 +73,7 @@ $app->post('/register', function() use ($app) {
             validateEmail($email);
 
             $db = new DbHandler();
-            $res = $db->createUser($name, $email, $password);
+            $res = $db->createUser($firstName,$lastName, $email, $password);
 
             if ($res == USER_CREATED_SUCCESSFULLY) {
                 $response["error"] = false;

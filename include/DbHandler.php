@@ -78,7 +78,7 @@ class DbHandler {
      * @param String $email User login email id
      * @param String $password User login password
      */
-    public function createUser($name, $email, $password) {
+    public function createUser($firstName,$lastName, $email, $password) {
         require_once 'PassHash.php';
         $response = array();
 
@@ -91,8 +91,8 @@ class DbHandler {
             $api_key = $this->generateApiKey();
 
             // insert query
-            $stmt = $this->conn->prepare("INSERT INTO users(name, email, password_hash, api_key, status) values(?, ?, ?, ?, 1)");
-            $stmt->bind_param("ssss", $name, $email, $password_hash, $api_key);
+            $stmt = $this->conn->prepare("INSERT INTO customer(firstName, lastName,customerEmail, password_hash, api_key, status) values(?, ?, ?, ?,?, 1)");
+            $stmt->bind_param("sssss", $firstName,$lastName, $email, $password_hash, $api_key);
 
             $result = $stmt->execute();
 
@@ -122,7 +122,7 @@ class DbHandler {
      */
     public function checkLogin($email, $password) {
         // fetching user by email
-        $stmt = $this->conn->prepare("SELECT password_hash FROM users WHERE email = ?");
+        $stmt = $this->conn->prepare("SELECT password_hash FROM CUSTOMER WHERE CUSTOMEREMAIL = ?");
 
         $stmt->bind_param("s", $email);
 
@@ -161,7 +161,7 @@ class DbHandler {
      * @return boolean
      */
     private function isUserExists($email) {
-        $stmt = $this->conn->prepare("SELECT id from users WHERE email = ?");
+        $stmt = $this->conn->prepare("SELECT customerId from customer WHERE customerEmail = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $stmt->store_result();
@@ -175,14 +175,14 @@ class DbHandler {
      * @param String $email User email id
      */
     public function getUserByEmail($email) {
-        $stmt = $this->conn->prepare("SELECT name, email, api_key, status, created_at FROM users WHERE email = ?");
+        $stmt = $this->conn->prepare("SELECT firstName, lastName,customerEmail, api_key, status, createdDate FROM customer WHERE customerEmail = ?");
         $stmt->bind_param("s", $email);
         if ($stmt->execute()) {
             // $user = $stmt->get_result()->fetch_assoc();
-            $stmt->bind_result($name, $email, $api_key, $status, $created_at);
+            $stmt->bind_result($firstName,$lastName, $email, $api_key, $status, $created_at);
             $stmt->fetch();
             $user = array();
-            $user["name"] = $name;
+            $user["name"] = $firstName." ".$lastName ;
             $user["email"] = $email;
             $user["api_key"] = $api_key;
             $user["status"] = $status;
@@ -199,7 +199,7 @@ class DbHandler {
      * @param String $user_id user id primary key in user table
      */
     public function getApiKeyById($user_id) {
-        $stmt = $this->conn->prepare("SELECT api_key FROM users WHERE id = ?");
+        $stmt = $this->conn->prepare("SELECT api_key FROM customer WHERE customerId = ?");
         $stmt->bind_param("i", $user_id);
         if ($stmt->execute()) {
             // $api_key = $stmt->get_result()->fetch_assoc();
@@ -217,7 +217,7 @@ class DbHandler {
      * @param String $api_key user api key
      */
     public function getUserId($api_key) {
-        $stmt = $this->conn->prepare("SELECT id FROM users WHERE api_key = ?");
+        $stmt = $this->conn->prepare("SELECT customerId FROM customer WHERE api_key = ?");
         $stmt->bind_param("s", $api_key);
         if ($stmt->execute()) {
             $stmt->bind_result($user_id);
@@ -238,7 +238,7 @@ class DbHandler {
      * @return boolean
      */
     public function isValidApiKey($api_key) {
-        $stmt = $this->conn->prepare("SELECT id from users WHERE api_key = ?");
+        $stmt = $this->conn->prepare("SELECT customerId from customer WHERE api_key = ?");
         $stmt->bind_param("s", $api_key);
         $stmt->execute();
         $stmt->store_result();

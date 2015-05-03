@@ -3,9 +3,9 @@
 class PassHash {
 
     // blowfish
-    private static $algo = '$2a';
+    private static $algo = '$2a'; // Do not change this !
     // cost parameter
-    private static $cost = '$10';
+    private static $cost = '$10'; // Do not chNGE THIS
 
     // mainly for internal use
     public static function unique_salt() {
