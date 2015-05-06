@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 02, 2015 at 07:45 PM
+-- Generation Time: May 06, 2015 at 10:04 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -38,7 +38,53 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `createdById` int(11) NOT NULL,
   `ModifiedDate` date NOT NULL,
   `ModifiedById` int(11) NOT NULL,
+  `customerEmail` varchar(128) NOT NULL,
+  `password_hash` varchar(128) NOT NULL,
+  `api_key` varchar(128) NOT NULL,
+  `status` int(11) NOT NULL,
   PRIMARY KEY (`customerId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`customerId`, `firstName`, `lastName`, `addressLine1`, `addressLine2`, `locality`, `pinCode`, `createdDate`, `createdById`, `ModifiedDate`, `ModifiedById`, `customerEmail`, `password_hash`, `api_key`, `status`) VALUES
+(1, 'Nivedha', 'Ashokan', '', '', '', 0, '0000-00-00', 0, '0000-00-00', 0, 'nivencool@gmail.com', '$2a$10$3de4e2a7868aa538e50c9uGDzOhVnBjjuWu6.hGMs.RjJHynwtv1C', 'c8fe3032d2e8597950bf7ae335c54a28', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order`
+--
+
+CREATE TABLE IF NOT EXISTS `order` (
+  `orderId` bigint(32) NOT NULL AUTO_INCREMENT,
+  `customerId` bigint(32) NOT NULL,
+  `orderDate` date NOT NULL,
+  `deliveryFree` tinyint(1) NOT NULL,
+  `orderStatus` varchar(32) NOT NULL,
+  `discountRate` int(11) DEFAULT NULL,
+  `paymentStatus` varchar(32) NOT NULL,
+  `totalAmount` int(11) NOT NULL,
+  `discountCode` varchar(32) NOT NULL,
+  PRIMARY KEY (`orderId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orderproduct`
+--
+
+CREATE TABLE IF NOT EXISTS `orderproduct` (
+  `orderId` int(11) NOT NULL,
+  `productId` int(11) NOT NULL,
+  `productQuantity` int(11) NOT NULL,
+  `productSaleUnitId` int(11) NOT NULL,
+  `orderProductStatus` int(11) NOT NULL,
+  `orderProductId` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`orderProductId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -87,6 +133,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `productQuantity2` double DEFAULT NULL,
   `productQuantity3` double DEFAULT NULL,
   `currentRate` float NOT NULL,
+  `supplierId` int(11) NOT NULL,
   PRIMARY KEY (`productId`),
   UNIQUE KEY `productName` (`productName`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
@@ -95,10 +142,10 @@ CREATE TABLE IF NOT EXISTS `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`productId`, `productName`, `productCategoryId`, `productDefaultQuantity`, `productDescription`, `productSaleUnitId`, `createdById`, `createdByDate`, `modifiedById`, `modifiedByDate`, `productQuantity1`, `productQuantity2`, `productQuantity3`, `currentRate`) VALUES
-(1, 'Beet Root', 1, 500, 'Organic BeetRoot', '1', 1, '2015-05-01', 0, '0000-00-00', 1000, 0, 0, 22),
-(3, 'Big Onion', 1, 1, 'Organic Big red onions', '3', 1, '2015-05-01', NULL, NULL, 2, NULL, NULL, 49),
-(4, 'GroundNut Oil', 4, 1, '', '2', 1, '2015-05-01', NULL, NULL, 0.5, NULL, NULL, 200);
+INSERT INTO `products` (`productId`, `productName`, `productCategoryId`, `productDefaultQuantity`, `productDescription`, `productSaleUnitId`, `createdById`, `createdByDate`, `modifiedById`, `modifiedByDate`, `productQuantity1`, `productQuantity2`, `productQuantity3`, `currentRate`, `supplierId`) VALUES
+(1, 'Beet Root', 1, 500, 'Organic BeetRoot', '1', 1, '2015-05-01', 0, '0000-00-00', 1000, 0, 0, 22, 0),
+(3, 'Big Onion', 1, 1, 'Organic Big red onions', '3', 1, '2015-05-01', NULL, NULL, 2, NULL, NULL, 49, 0),
+(4, 'GroundNut Oil', 4, 1, '', '2', 1, '2015-05-01', NULL, NULL, 0.5, NULL, NULL, 200, 0);
 
 -- --------------------------------------------------------
 
